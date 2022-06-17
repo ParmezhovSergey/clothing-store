@@ -1,14 +1,35 @@
-import { Grid } from "@mui/material";
+import { Button, Grid } from "@mui/material";
+import { Container } from "@mui/system";
 import React, { useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { getProductsApi } from "./api";
+import { setFilterClothing } from "./clothingReducer";
 import ProductCard from "./ProductCard";
 
-const ProductList = ({ products }) => {
-  const [product, setProduct] = useState([]);
-  useEffect(() => {
-    setProduct(products);
-  }, [products]);
+const ProductList = () => {
+  const dispatch = useDispatch();
+  const products = useSelector((state) => state.clothing.products);
+  const [isFilter, setIsFilter] = useState(false);
 
-  const List = product.map((p) => (
+  useEffect(() => {
+    if (!isFilter) {
+      dispatch(getProductsApi());
+    }
+  }, [isFilter]);
+
+  useEffect(() => {
+    if (isFilter) {
+      dispatch(setFilterClothing());
+    }
+  }, [isFilter]);
+
+  const getFilter = () => {
+    setIsFilter(true);
+  };
+  const getProducts = () => {
+    setIsFilter(false);
+  };
+  const List = products.map((p) => (
     <ProductCard
       key={p.product_id}
       display_name={p.created_by.display_name}
@@ -17,9 +38,25 @@ const ProductList = ({ products }) => {
     />
   ));
   return (
-    <Grid container spacing={2}>
-      {List}
-    </Grid>
+    <Container>
+      <Button
+        sx={{ margin: "20px 0 0 0" }}
+        variant="contained"
+        onClick={getProducts}
+      >
+        Все товары
+      </Button>
+      <Button
+        sx={{ margin: "20px 0 0 20px" }}
+        variant="contained"
+        onClick={getFilter}
+      >
+        товары в наличии
+      </Button>
+      <Grid container rowSpacing={2} spacing={2} marginTop={3}>
+        {List}
+      </Grid>
+    </Container>
   );
 };
 

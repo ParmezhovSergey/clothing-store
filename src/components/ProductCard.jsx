@@ -7,14 +7,19 @@ import {
   Typography,
 } from "@mui/material";
 import React from "react";
-import photo from './img/web.png'
+import photo from "./img/148_large.jpeg";
 
 const ProductCard = (props) => {
   return (
     <Grid item xs="6" sm="4" md="3">
       <Card sx={{ maxWidth: 345 }}>
         <CardActionArea>
-          <CardMedia component="img" height="300"  src={photo} alt="green iguana" />
+          <CardMedia
+            component="img"
+            height="300"
+            src={photo}
+            alt="green iguana"
+          />
           <CardContent>
             <Typography gutterBottom variant="h8" component="div">
               {props.display_name}
